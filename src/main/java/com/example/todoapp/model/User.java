@@ -28,5 +28,6 @@ public class User {
     private LocalDateTime createdDate;
 
     @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     private Set<Todo> todos;
 }
