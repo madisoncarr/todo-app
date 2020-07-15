@@ -12,6 +12,7 @@ import java.util.Set;
 @Entity
 @RequiredArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "app_user")
 public class User {
 
