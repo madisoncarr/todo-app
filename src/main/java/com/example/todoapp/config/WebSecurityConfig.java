@@ -1,4 +1,4 @@
-package com.example.todoapp;
+package com.example.todoapp.config;
 
 import com.example.todoapp.model.UserRepository;
 import com.example.todoapp.services.UserDetailsServiceImpl;
