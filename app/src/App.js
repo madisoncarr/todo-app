@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import './App.css';
 import { CookiesProvider } from 'react-cookie';
+import Login from './Login';
 import Redirect from "react-router-dom/Redirect";
 import Route from "react-router-dom/Route";
 import Switch from "react-router-dom/Switch";
-import Router from "react-router-dom/Router";
+import {BrowserRouter as Router} from "react-router-dom";
 
 class App extends Component {
   render() {
