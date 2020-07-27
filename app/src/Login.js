@@ -14,7 +14,7 @@ class Login extends Component {
         e.preventDefault();
         console.log("got here");
         const email = e.target.value;
-        const json = await axios.post("/doLogin", {"email": email});
+        const json = await axios.post("/doLogin", {"username": email});
         const user = json.data;
         console.log(user);
     };

@@ -29,14 +29,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers("/login", "/resource/**").permitAll()
                 .and()
-                .csrf()
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .and()
                 .formLogin().loginPage("/login").usernameParameter("email").permitAll()
                 .loginProcessingUrl("/doLogin")
                 .successForwardUrl("/postLogin")
                 .failureUrl("/loginFailed")
                 .and()
-                .logout().logoutUrl("/doLogout").logoutSuccessUrl("/logout").permitAll();
+                .logout().logoutUrl("/doLogout").logoutSuccessUrl("/logout").permitAll()
+                .and()
+                .csrf().disable();
     }
 }
