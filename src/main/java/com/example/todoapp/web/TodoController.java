@@ -4,6 +4,7 @@ import com.example.todoapp.model.Todo;
 import com.example.todoapp.model.TodoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping("/api/todo")
+@CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
 public class TodoController {
 

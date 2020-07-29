@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './App.css';
 import { CookiesProvider } from 'react-cookie';
 import Login from './Login';
+import Todos from './Todos';
 import Redirect from "react-router-dom/Redirect";
 import Route from "react-router-dom/Route";
 import Switch from "react-router-dom/Switch";
@@ -15,6 +16,7 @@ class App extends Component {
             <Switch>
               {/*<Redirect from="/" to="/login" />*/}
               <Route path='/login' component={Login} />
+              <Route path='/todos' component={Todos} />
               <Route component={Login} />
             </Switch>
           </Router>

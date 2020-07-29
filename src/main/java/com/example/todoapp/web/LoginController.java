@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession;
 @RestController
 public class LoginController {
     private static final Logger log = LogManager.getLogger(LoginController.class);
-
+//TODO: may need to get rid of this controller
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
         return "login";
