@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/api/todo")
+//@RequestMapping("/todos")
 @CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
 public class TodoController {
@@ -23,8 +23,9 @@ public class TodoController {
         this.todoRepository = todoRepository;
     }
 
-    @GetMapping("/")
+    @GetMapping("/todos")
     ResponseEntity<Collection<Todo>> getAllTodos() {
+        log.info("*************IN TODOS CONTROLLER**************");
         Collection<Todo> todos = todoRepository.findAll();
         return ResponseEntity.ok(todos);
     }
