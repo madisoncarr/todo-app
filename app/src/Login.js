@@ -5,27 +5,50 @@ class Login extends Component {
     constructor(props) {
         super(props);
          this.state = {
-            email: ""
+            username: "user",
+             password: "password",
+             hasLoginFailed: false,
+             showSuccessMessage: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
-    handleSubmit = async (e) => {
+    handleChange(event) {
+        this.setState(
+            {
+                [event.target.name] : event.target.value
+            }
+        )
+    }
+
+    handleSubmit = e => {
         e.preventDefault();
-        console.log("got here");
-        const email = e.target.value;
-        const json = await axios.post("/doLogin", {"username": email});
-        const user = json.data;
-        console.log(user);
+        // console.log("got here");
+        // const email = e.target.value;
+        // const json = await axios.post("/doLogin", {"username": email});
+        // const user = json.data;
+        // console.log(user);
+        if(this.state.username === 'user' && this.state.password === 'password') {
+            this.setState({showSuccessMessage: true})
+            this.setState({hasLoginFailed : false})
+        } else {
+            this.setState({showSuccessMessage : false})
+            this.setState({hasLoginFailed: true})
+        }
     };
 
     render() {
-        console.log(`email value: ${this.state.email}`);
         return (
             <div>
-                <h1>What is your email?</h1>
-                <input placeholder={"email here"} value={this.state.email} onChange={(e) => this.setState({email:e.target.value})}/>
-                <button onClick={(e)=>this.handleSubmit(e)}>Enter</button>
+                <h1>Login</h1>
+                <div className="container">
+                    {this.state.hasLoginFailed && <div className="alert alert-warning">Invalid Credentials</div>}
+                    {this.state.showSuccessMessage && <div>Login Sucessful</div>}
+                    User Name: <input type="text" name="username" value={this.state.username} onChange={this.handleChange} />
+                    Password: <input type="password" name="password" value={this.state.password} onChange={this.handleChange} />
+                    <button className="btn btn-success" onClick={this.handleSubmit}>Login</button>
+                </div>
             </div>
 
         )
