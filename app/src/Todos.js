@@ -10,11 +10,10 @@ export default class Todos extends Component {
     }
 
     async componentDidMount() {
-        const USER = 'user';
-        const PASSWORD = 'password';
-        console.log("***************BEFORE REQUEST IN COMPONENT DID MOUNT TODOS*****************")
 
-        const response = await axios.get("http://localhost:8080/todos", {headers: {authorization: 'Basic ' + window.btoa(USER + ":" + PASSWORD)}});
+        const response = await axios.get("http://localhost:8080/todos"
+            // , {headers: {authorization: 'Basic ' + window.btoa(USER + ":" + PASSWORD)}}
+            );
         const todos = response.data;
         console.log("These are the todos: " + todos);
         this.setState({todos})

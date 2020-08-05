@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import axios from 'axios';
+import AuthenticationService from './AuthenticationService'
 
 class Login extends Component {
     constructor(props) {
@@ -29,13 +29,23 @@ class Login extends Component {
         // const json = await axios.post("/doLogin", {"username": email});
         // const user = json.data;
         // console.log(user);
-        if(this.state.username === 'user' && this.state.password === 'password') {
-            this.setState({showSuccessMessage: true})
-            this.setState({hasLoginFailed : false})
-        } else {
-            this.setState({showSuccessMessage : false})
-            this.setState({hasLoginFailed: true})
-        }
+        // if(this.state.username === 'user' && this.state.password === 'password') {
+        //     this.props.history.push('/todos');
+        //     // this.setState({showSuccessMessage: true})
+        //     // this.setState({hasLoginFailed : false})
+        // } else {
+        //     this.setState({showSuccessMessage : false})
+        //     this.setState({hasLoginFailed: true})
+        // }
+        AuthenticationService
+            .executeBasicAuthenticationService(this.state.username, this.state.password)
+            .then(() => {
+                AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password)
+                this.props.history.push('/todos');
+            }).catch(() => {
+                this.setState({ showSuccessMessage: false })
+                this.setState({ hasLoginFailed: true })
+            })
     };
 
     render() {
