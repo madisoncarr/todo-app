@@ -14,7 +14,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.DefaultClock;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
+@Component
 public class JwtTokenUtil implements Serializable {
 
     static final String CLAIM_KEY_USERNAME = "sub";
@@ -25,7 +27,7 @@ public class JwtTokenUtil implements Serializable {
     @Value("${jwt.signing.key.secret}")
     private String secret;
 
-    @Value('${jwt.token.expiration.in.seconds}')
+    @Value("${jwt.token.expiration.in.seconds}")
     private Long expiration;
 
     public String getUsernameFromToken(String token) {
