@@ -3,6 +3,7 @@ package com.example.todoapp.model;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -23,6 +24,9 @@ public class User {
     private String lastName;
     @NonNull
     private String email;
+    @NonNull
+    private String password;
+
     @CreatedDate
     @DateTimeFormat
     private LocalDateTime createdDate;
@@ -30,4 +34,9 @@ public class User {
     @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private Set<Todo> todos;
+
+    public User(String email, String password) {
+        this.email = email;
+        this.password = BCrypt.hashpw(password, BCrypt.gensalt());
+    }
 }
