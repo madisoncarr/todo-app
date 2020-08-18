@@ -5,14 +5,33 @@ export const USER_NAME_SESSION_ATTRIBUTE_NAME = 'authenticatedUser';
 
 class AuthenticationService {
 
-    executeBasicAuthenticationService(username, password) {
-        return axios.get("http://localhost:8080/basicauth",
-            { headers: { authorization: this.createBasicAuthToken(username, password) } });
+    executeJwtAuthenticateService(username, password) {
+        console.log(username);
+        return axios.post(`http://localhost:8080/authenticate`, {
+            username,
+            password
+        });
     }
 
-    createBasicAuthToken(username, password) {
-        return 'Basic ' + window.btoa(username + ":" + password);
+    registerSuccessfulLoginForJwt(username, token) {
+        sessionStorage.setItem(USER_NAME_SESSION_ATTRIBUTE_NAME, username);
+        this.setupAxiosInterceptors(this.createJWTToken(token));
     }
+
+    createJWTToken(token) {
+        return 'Bearer ' + token;
+    }
+
+    // executeBasicAuthenticationService(username, password) {
+    //     return axios.get("http://localhost:8080/basicauth",
+    //         { headers: { authorization: this.createBasicAuthToken(username, password) } });
+    // }
+
+
+    // createBasicAuthToken(username, password) {
+    //     return 'Basic ' + window.btoa(username + ":" + password);
+    // }
+
 
     registerSuccessfulLogin(username, password) {
         sessionStorage.setItem(USER_NAME_SESSION_ATTRIBUTE_NAME, username);

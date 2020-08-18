@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Data
 @Entity
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "app_user")
@@ -38,5 +38,6 @@ public class User {
     public User(String email, String password) {
         this.email = email;
         this.password = BCrypt.hashpw(password, BCrypt.gensalt());
+        this.createdDate = LocalDateTime.now();
     }
 }
