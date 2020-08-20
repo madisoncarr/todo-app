@@ -80,6 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         authenticationPath
                 )
                 .antMatchers(HttpMethod.OPTIONS, "/**")
+                .antMatchers(HttpMethod.POST, "/signup")
                 .and()
                 .ignoring()
                 .antMatchers(HttpMethod.GET, "/")

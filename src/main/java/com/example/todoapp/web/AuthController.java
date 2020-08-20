@@ -2,6 +2,8 @@ package com.example.todoapp.web;
 
 //import com.example.todoapp.config.AuthenticationBean;
 import com.example.todoapp.model.TodoUserDetails;
+import com.example.todoapp.model.User;
+import com.example.todoapp.model.UserRepository;
 import com.example.todoapp.utils.AuthenticationException;
 import com.example.todoapp.utils.JwtTokenRequest;
 import com.example.todoapp.utils.JwtTokenResponse;
@@ -38,6 +40,9 @@ public class AuthController {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtTokenRequest authenticationRequest) throws AuthenticationException {
 
@@ -63,6 +68,26 @@ public class AuthController {
         } else {
             return ResponseEntity.badRequest().body(null);
         }
+    }
+
+    @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    public ResponseEntity<?> signup(@RequestBody JwtTokenRequest request) {
+        try {
+            User newUser = new User(request.getUsername(), request.getPassword());
+            newUser.setFirstName("Sam");
+            userRepository.save(newUser);
+
+            authenticate(request.getUsername(), request.getPassword());
+
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
+
+            final String token = jwtTokenUtil.generateToken(userDetails);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new JwtTokenResponse(token));
+        } catch (Exception ex){
+            System.out.println("Error in signup Reason: " + ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Didn't work");
+        }
+
     }
 
     @ExceptionHandler({ AuthenticationException.class })
