@@ -75,12 +75,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity webSecurity) throws Exception {
         webSecurity
                 .ignoring()
-                .antMatchers(
-                        HttpMethod.POST,
-                        authenticationPath
-                )
+                .antMatchers(HttpMethod.POST, "/auth/login")
+                .antMatchers(HttpMethod.GET, "/auth/me")
                 .antMatchers(HttpMethod.OPTIONS, "/**")
-                .antMatchers(HttpMethod.POST, "/signup")
+//                .antMatchers(HttpMethod.POST, "/signup")
                 .and()
                 .ignoring()
                 .antMatchers(HttpMethod.GET, "/")

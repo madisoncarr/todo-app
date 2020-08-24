@@ -16,16 +16,22 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 //import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.AuthenticatedPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import com.example.todoapp.utils.JwtTokenUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
+import java.util.Map;
 import java.util.Objects;
 
 @CrossOrigin(origins="http://localhost:3000")
 @RestController
+@RequestMapping("/auth")
 public class AuthController {
 
     @Value("${jwt.http.request.header}")
@@ -43,9 +49,8 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
-    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtTokenRequest authenticationRequest) throws AuthenticationException {
-
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
@@ -88,6 +93,13 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Didn't work");
         }
 
+    }
+
+    @RequestMapping(value = "/me", method = RequestMethod.GET)
+    public ResponseEntity<?> getSelf(@AuthenticationPrincipal AuthenticatedPrincipal principal) {
+        String username = principal.getName(); //THIS IS THROWING NPE
+        TodoUserDetails userDetails = (TodoUserDetails) userDetailsService.loadUserByUsername(username);
+        return ResponseEntity.ok(userDetails.getUserDetails());
     }
 
     @ExceptionHandler({ AuthenticationException.class })
