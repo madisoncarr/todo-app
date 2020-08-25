@@ -79,7 +79,6 @@ public class AuthController {
     public ResponseEntity<?> signup(@RequestBody JwtTokenRequest request) {
         try {
             User newUser = new User(request.getUsername(), request.getPassword());
-            newUser.setFirstName("Sam");
             userRepository.save(newUser);
 
             authenticate(request.getUsername(), request.getPassword());
@@ -96,8 +95,8 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/me", method = RequestMethod.GET)
-    public ResponseEntity<?> getSelf(@AuthenticationPrincipal AuthenticatedPrincipal principal) {
-        String username = principal.getName(); //THIS IS THROWING NPE
+    public ResponseEntity<?> getSelf(Principal principal) {
+        String username = principal.getName();
         TodoUserDetails userDetails = (TodoUserDetails) userDetailsService.loadUserByUsername(username);
         return ResponseEntity.ok(userDetails.getUserDetails());
     }

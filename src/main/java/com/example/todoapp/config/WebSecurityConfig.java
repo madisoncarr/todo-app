@@ -76,9 +76,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         webSecurity
                 .ignoring()
                 .antMatchers(HttpMethod.POST, "/auth/login")
-                .antMatchers(HttpMethod.GET, "/auth/me")
+//                .antMatchers(HttpMethod.GET, "/auth/me")
                 .antMatchers(HttpMethod.OPTIONS, "/**")
-//                .antMatchers(HttpMethod.POST, "/signup")
+                .antMatchers(HttpMethod.POST, "/auth/signup")
                 .and()
                 .ignoring()
                 .antMatchers(HttpMethod.GET, "/")
