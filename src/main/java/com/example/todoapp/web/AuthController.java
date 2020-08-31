@@ -53,11 +53,11 @@ public class AuthController {
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtTokenRequest authenticationRequest) throws AuthenticationException {
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        final TodoUserDetails userDetails = (TodoUserDetails) userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 
         final String token = jwtTokenUtil.generateToken(userDetails);
 
-        return ResponseEntity.ok(new JwtTokenResponse(token));
+        return ResponseEntity.ok(new JwtTokenResponse(token, userDetails.getUserDetails()));
     }
 
     @RequestMapping(value = "/refresh", method = RequestMethod.GET)
@@ -83,10 +83,10 @@ public class AuthController {
 
             authenticate(request.getUsername(), request.getPassword());
 
-            final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
+            final TodoUserDetails userDetails = (TodoUserDetails) userDetailsService.loadUserByUsername(request.getUsername());
 
             final String token = jwtTokenUtil.generateToken(userDetails);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new JwtTokenResponse(token));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new JwtTokenResponse(token, userDetails.getUserDetails()));
         } catch (Exception ex){
             System.out.println("Error in signup Reason: " + ex.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Didn't work");

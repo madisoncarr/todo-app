@@ -31,7 +31,7 @@ export const me = () => async dispatch => {
 }
 
 export const auth = (email, password, method) => async dispatch => {
-    let res
+    let res;
     try {
         res = await axios.post(`/auth/${method}`, {email, password})
     } catch (authError) {
@@ -39,7 +39,9 @@ export const auth = (email, password, method) => async dispatch => {
     }
 
     try {
-        dispatch(getUser(res.data))
+        const {token, user} = res.data;
+        setupAxiosInterceptors(token);
+        dispatch(getUser(user))
         history.push('/home')
     } catch (dispatchOrHistoryErr) {
         console.error(dispatchOrHistoryErr)
@@ -48,11 +50,11 @@ export const auth = (email, password, method) => async dispatch => {
 
 export const logout = () => async dispatch => {
     try {
-        await axios.post('/auth/logout')
-        dispatch(removeUser())
-        history.push('/login')
+        await axios.post('/auth/logout');
+        dispatch(removeUser());
+        history.push('/login');
     } catch (err) {
-        console.error(err)
+        console.error(err);
     }
 }
 
@@ -62,10 +64,30 @@ export const logout = () => async dispatch => {
 export default function(state = defaultUser, action) {
     switch (action.type) {
         case GET_USER:
-            return action.user
+            return action.user;
         case REMOVE_USER:
-            return defaultUser
+            return defaultUser;
         default:
-            return state
+            return state;
     }
+}
+
+/**
+ * UTILS
+ */
+function setupAxiosInterceptors(token) {
+    token = createJWTToken(token);
+    return axios.interceptors.request.use(
+        (config) => {
+            //Trying to figure out how to determine if a user is signed in and/or how to eject this interceptor
+            if (this.isUserLoggedIn()) {
+                config.headers.authorization = token;
+            }
+            return config;
+        }
+    )
+}
+
+function createJWTToken(token) {
+    return 'Bearer ' + token;
 }
