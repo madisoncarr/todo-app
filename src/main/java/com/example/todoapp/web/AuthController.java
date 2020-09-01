@@ -57,7 +57,8 @@ public class AuthController {
 
         final String token = jwtTokenUtil.generateToken(userDetails);
 
-        return ResponseEntity.ok(new JwtTokenResponse(token, userDetails.getUserDetails()));
+        ResponseEntity<?> response = ResponseEntity.ok(new JwtTokenResponse(token, userDetails.getUserDetails()));
+        return response;
     }
 
     @RequestMapping(value = "/refresh", method = RequestMethod.GET)

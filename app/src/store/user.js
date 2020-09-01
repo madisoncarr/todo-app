@@ -11,6 +11,7 @@ const REMOVE_USER = 'REMOVE_USER'
  * INITIAL STATE
  */
 const defaultUser = {}
+let axiosInterceptor = "";
 
 /**
  * ACTION CREATORS
@@ -23,26 +24,30 @@ const removeUser = () => ({type: REMOVE_USER})
  */
 export const me = () => async dispatch => {
     try {
-        const res = await axios.get('/auth/me')
+        console.log("*************Call from thunk creator me");
+        const res = await axios.get('http://localhost:8080/auth/me')
         dispatch(getUser(res.data || defaultUser))
     } catch (err) {
         console.error(err)
     }
 }
 
-export const auth = (email, password, method) => async dispatch => {
+export const auth = (username, password, method) => async dispatch => {
     let res;
     try {
-        res = await axios.post(`/auth/${method}`, {email, password})
+        console.log("********** call from thunk creator auth");
+        res = await axios.post(`http://localhost:8080/auth/${method}`, {username, password})
     } catch (authError) {
         return dispatch(getUser({error: authError}))
     }
 
     try {
         const {token, user} = res.data;
+        console.log("********* res.data: ", res.data);
         setupAxiosInterceptors(token);
         dispatch(getUser(user))
-        history.push('/home')
+        history.push('/todos')
+        console.log("********** reached the end of thunk creator auth");
     } catch (dispatchOrHistoryErr) {
         console.error(dispatchOrHistoryErr)
     }
@@ -50,7 +55,8 @@ export const auth = (email, password, method) => async dispatch => {
 
 export const logout = () => async dispatch => {
     try {
-        await axios.post('/auth/logout');
+        await axios.post('http://localhost:8080/auth/logout');
+        ejectAxiosInterceptor();
         dispatch(removeUser());
         history.push('/login');
     } catch (err) {
@@ -77,15 +83,17 @@ export default function(state = defaultUser, action) {
  */
 function setupAxiosInterceptors(token) {
     token = createJWTToken(token);
-    return axios.interceptors.request.use(
+    axiosInterceptor = axios.interceptors.request.use(
         (config) => {
             //Trying to figure out how to determine if a user is signed in and/or how to eject this interceptor
-            if (this.isUserLoggedIn()) {
-                config.headers.authorization = token;
-            }
+            config.headers.authorization = token;
             return config;
         }
     )
+}
+
+function ejectAxiosInterceptor() {
+    axios.interceptors.request.eject(axiosInterceptor);
 }
 
 function createJWTToken(token) {
