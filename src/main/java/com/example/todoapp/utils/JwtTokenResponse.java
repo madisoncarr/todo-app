@@ -2,6 +2,8 @@ package com.example.todoapp.utils;
 
 import com.example.todoapp.model.Todo;
 import com.example.todoapp.model.User;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -12,25 +14,34 @@ public class JwtTokenResponse implements Serializable {
 
     private final String token;
 
-    private final ResponseUser user = new ResponseUser();
+    private final ResponseUser user;
 
     public JwtTokenResponse(String token) {
         this.token = token;
+        this.user = null;
     }
 
     public JwtTokenResponse(String token, User user) {
         this.token = token;
-        this.user.id = user.getId();
-        this.user.firstName = user.getFirstName();
-        this.user.lastName = user.getLastName();
-        this.user.email = user.getEmail();
-        this.user.todos = user.getTodos();
+        ResponseUser responseUser = new ResponseUser();
+        responseUser.id = user.getId();
+        responseUser.firstName = user.getFirstName();
+        responseUser.lastName = user.getLastName();
+        responseUser.email = user.getEmail();
+        responseUser.todos = user.getTodos();
+
+        this.user = responseUser;
     }
 
     public String getToken() {
         return this.token;
     }
 
+    public ResponseUser getUser() {
+        return this.user;
+    }
+
+    @Data
     private class ResponseUser {
         private Long id;
         private String firstName;

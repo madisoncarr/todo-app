@@ -1,6 +1,5 @@
 package com.example.todoapp.web;
 
-//import com.example.todoapp.config.AuthenticationBean;
 import com.example.todoapp.model.TodoUserDetails;
 import com.example.todoapp.model.User;
 import com.example.todoapp.model.UserRepository;
@@ -15,18 +14,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-//import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.AuthenticatedPrincipal;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import com.example.todoapp.utils.JwtTokenUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.Map;
 import java.util.Objects;
 
 @CrossOrigin(origins="http://localhost:3000")
