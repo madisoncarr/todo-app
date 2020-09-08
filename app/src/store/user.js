@@ -1,5 +1,6 @@
 import axios from 'axios'
 import history from '../history'
+import {setTodos, removeTodos} from './todos';
 
 /**
  * ACTION TYPES
@@ -24,8 +25,13 @@ const removeUser = () => ({type: REMOVE_USER})
  */
 export const me = () => async dispatch => {
     try {
-        console.log("*************Call from thunk creator me");
         const res = await axios.get('http://localhost:8080/auth/me')
+        const {user} = res.data;
+        if (user) {
+            const {todos} = user;
+            delete user.todos;
+            dispatch(setTodos(todos));
+        }
         dispatch(getUser(res.data || defaultUser))
     } catch (err) {
         console.error(err)
@@ -35,7 +41,6 @@ export const me = () => async dispatch => {
 export const auth = (username, password, method) => async dispatch => {
     let res;
     try {
-        console.log("********** call from thunk creator auth");
         res = await axios.post(`http://localhost:8080/auth/${method}`, {username, password})
     } catch (authError) {
         return dispatch(getUser({error: authError}))
@@ -43,11 +48,12 @@ export const auth = (username, password, method) => async dispatch => {
 
     try {
         const {token, user} = res.data;
-        console.log("********* res.data: ", res.data);
+        const {todos} = user;
+        delete user.todos;
         setupAxiosInterceptors(token);
-        dispatch(getUser(user))
+        dispatch(getUser(user));
+        dispatch(setTodos(todos));
         history.push('/todos')
-        console.log("********** reached the end of thunk creator auth");
     } catch (dispatchOrHistoryErr) {
         console.error(dispatchOrHistoryErr)
     }
@@ -58,6 +64,7 @@ export const logout = () => async dispatch => {
         await axios.post('http://localhost:8080/auth/logout');
         ejectAxiosInterceptor();
         dispatch(removeUser());
+        dispatch(removeTodos());
         history.push('/login');
     } catch (err) {
         console.error(err);
@@ -85,7 +92,6 @@ function setupAxiosInterceptors(token) {
     token = createJWTToken(token);
     axiosInterceptor = axios.interceptors.request.use(
         (config) => {
-            //Trying to figure out how to determine if a user is signed in and/or how to eject this interceptor
             config.headers.authorization = token;
             return config;
         }

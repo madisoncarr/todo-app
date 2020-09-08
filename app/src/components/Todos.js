@@ -1,23 +1,8 @@
 import React, {Component} from "react";
 import axios from "axios";
+import {connect} from 'react-redux'
 
-export default class Todos extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            todos: []
-        }
-    }
-
-    async componentDidMount() {
-
-        const response = await axios.get("http://localhost:8080/todos"
-            // , {headers: {authorization: 'Basic ' + window.btoa(USER + ":" + PASSWORD)}}
-            );
-        const todos = response.data;
-        console.log("These are the todos: " + todos);
-        this.setState({todos})
-    }
+class Todos extends Component {
 
     render() {
         return (<div>
@@ -27,3 +12,17 @@ export default class Todos extends Component {
         </div>)
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        todos: state.todos
+    }
+}
+
+// const mapDispatchToProps = dispatch => {
+//     return {
+//
+//     }
+// }
+
+export default connect(mapStateToProps)(Todos);
