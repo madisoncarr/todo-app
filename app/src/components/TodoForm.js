@@ -16,6 +16,14 @@ const TodoForm = props => {
                 value={props.todo.deadline}
                 onChange={props.handleChange}
             />
+            <Input
+                name="importance"
+                type="number"
+                min="1"
+                max="5"
+                value={props.todo.importance}
+                onChange={props.handleChange}
+            />
         </Form>
     );
 };

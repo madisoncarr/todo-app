@@ -7,7 +7,7 @@ class AddTodo extends Component {
         this.state = {
             "title": "",
             "deadline": "",
-            "importance": 0
+            "importance": 1
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -15,6 +15,11 @@ class AddTodo extends Component {
     handleChange = event => {
         this.setState({[event.target.name]: event.target.value})
     };
+
+    handleSubmit = event => {
+        event.preventDefault();
+
+    }
 
     render() {
         return (
@@ -25,3 +30,4 @@ class AddTodo extends Component {
         );
     }
 }
+

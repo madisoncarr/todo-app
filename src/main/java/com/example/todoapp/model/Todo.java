@@ -8,9 +8,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Range;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import java.time.LocalDate;
 
@@ -30,4 +28,8 @@ public class Todo {
     @Range(min = 1, max = 5)
     private Integer importance;
     private boolean status = false;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "user_id")
+    private User user;
 }
