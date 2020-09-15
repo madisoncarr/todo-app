@@ -1,5 +1,7 @@
 import React, {Component} from "react";
 import TodoForm from "./TodoForm";
+import {addTodo} from "../store";
+import {connect} from 'react-redux'
 
 class AddTodo extends Component {
     constructor(props) {
@@ -10,6 +12,7 @@ class AddTodo extends Component {
             "importance": 1
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange = event => {
@@ -18,7 +21,7 @@ class AddTodo extends Component {
 
     handleSubmit = event => {
         event.preventDefault();
-
+        this.props.addTodo(this.state);
     }
 
     render() {
@@ -30,4 +33,14 @@ class AddTodo extends Component {
         );
     }
 }
+
+const mapDispatchToProps = dispatch => {
+    return {
+        addTodo(todo) {
+            dispatch(addTodo(todo));
+        }
+    }
+}
+
+export default connect(null, mapDispatchToProps)(AddTodo);
 
