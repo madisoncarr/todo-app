@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.security.Principal;
 import java.util.Collection;
 
@@ -39,13 +40,14 @@ public class TodoController {
     }
 
     @RequestMapping(value = "/todos", method = RequestMethod.POST)
-    ResponseEntity<Todo> postTodo(@Valid @RequestBody Todo todo, Principal principal) {
+    ResponseEntity<?> postTodo(@Valid @RequestBody Todo todo, Principal principal) {
         try {
         User user = userRepository.findByEmail(principal.getName());
-        todo.setUser(user);
+        todo.setUserId(user.getId());
         Todo newTodo = todoRepository.save(todo);
-        //Need to add URI
-        return ResponseEntity.created().body(newTodo);
+        return ResponseEntity.created(new URI("/todos/" + newTodo.getId())).body(newTodo);
+        } catch (Exception ex) {
+            return ResponseEntity.status(500).body("Something went wrong");
         }
     }
 }
