@@ -5,4 +5,5 @@
  */
 export {default as Navbar} from './navbar';
 export {default as Todos} from './Todos';
+export {default as AddTodo} from './AddTodo';
 export {Login, Signup} from './auth-form';

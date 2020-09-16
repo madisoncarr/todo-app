@@ -32,10 +32,6 @@ public class Todo {
     @Column(name="user_id")
     private Long userId;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private User user;
-
     public Long getId() {
         return id;
     }

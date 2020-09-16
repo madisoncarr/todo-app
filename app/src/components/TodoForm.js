@@ -1,5 +1,5 @@
-import React from "react";
 import {Form, Input} from "reactstrap";
+import React from "react";
 
 const TodoForm = props => {
     return (
@@ -24,8 +24,9 @@ const TodoForm = props => {
                 value={props.todo.importance}
                 onChange={props.handleChange}
             />
+            <button type="submit">Add Todo</button>
         </Form>
-    );
+);
 };
 
 export default TodoForm;

@@ -43,7 +43,6 @@ export const postTodo = todo => async dispatch => {
     try {
         const {data} = await axios.post('http://localhost:8080/todos', todo);
         dispatch(addTodo(data));
-        history.push('/todos');
     } catch (error) {
         console.error(error);
     }
