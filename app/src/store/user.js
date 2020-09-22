@@ -1,6 +1,7 @@
 import axios from 'axios'
 import history from '../history'
 import {setTodos, removeTodos} from './todos';
+import Session from '../utils';
 
 /**
  * ACTION TYPES
@@ -25,6 +26,10 @@ const removeUser = () => ({type: REMOVE_USER})
  */
 export const me = () => async dispatch => {
     try {
+        const token = Session.get("token");
+        if (token) {
+            setupAxiosInterceptors(token);
+        }
         const res = await axios.get('http://localhost:8080/auth/me')
         const {user} = res.data;
         if (user) {
@@ -50,6 +55,7 @@ export const auth = (username, password, method) => async dispatch => {
         const {token, user} = res.data;
         const {todos} = user;
         delete user.todos;
+        Session.set("token", token);
         setupAxiosInterceptors(token);
         dispatch(getUser(user));
         dispatch(setTodos(todos));
@@ -62,6 +68,7 @@ export const auth = (username, password, method) => async dispatch => {
 export const logout = () => async dispatch => {
     try {
         await axios.post('http://localhost:8080/auth/logout');
+        Session.remove("token");
         ejectAxiosInterceptor();
         dispatch(removeUser());
         dispatch(removeTodos());
