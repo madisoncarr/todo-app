@@ -31,13 +31,16 @@ export const me = () => async dispatch => {
             setupAxiosInterceptors(token);
         }
         const res = await axios.get('http://localhost:8080/auth/me')
-        const {user} = res.data;
+        const user = res.data;
+        console.log("**** user: ", user);
         if (user) {
+            console.log("**** call from inside if(user) block")
             const {todos} = user;
+            console.log("*** todos: ", todos);
             delete user.todos;
             dispatch(setTodos(todos));
         }
-        dispatch(getUser(res.data || defaultUser))
+        dispatch(getUser(user || defaultUser))
     } catch (err) {
         console.error(err)
     }
@@ -66,6 +69,7 @@ export const auth = (username, password, method) => async dispatch => {
 }
 
 export const logout = () => async dispatch => {
+    console.log("**** made it into logout thunk creator");
     try {
         await axios.post('http://localhost:8080/auth/logout');
         Session.remove("token");
