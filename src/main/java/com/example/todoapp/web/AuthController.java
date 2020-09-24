@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import com.example.todoapp.utils.JwtTokenUtil;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.Objects;
@@ -93,6 +94,12 @@ public class AuthController {
         String username = principal.getName();
         TodoUserDetails userDetails = (TodoUserDetails) userDetailsService.loadUserByUsername(username);
         return ResponseEntity.ok(userDetails.getUserDetails());
+    }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    public ResponseEntity logout(HttpServletRequest request) throws ServletException {
+        request.logout();
+        return ResponseEntity.ok().build();
     }
 
     @ExceptionHandler({ AuthenticationException.class })

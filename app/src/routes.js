@@ -26,10 +26,11 @@ class Routes extends Component {
                         {/* Routes placed here are only available after logging in */}
                         <Route exact path="/todos" component={Todos} />
                         <Route path="/todos/add" component={AddTodo} />
+                        <Route component={Todos} />
                     </Switch>
                 )}
                 {/* Displays our Login component as a fallback */}
-                <Route component={Login} />
+                <Route exact path="/" component={Login} />
             </Switch>
         )
     }

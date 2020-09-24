@@ -32,11 +32,8 @@ export const me = () => async dispatch => {
         }
         const res = await axios.get('http://localhost:8080/auth/me')
         const user = res.data;
-        console.log("**** user: ", user);
         if (user) {
-            console.log("**** call from inside if(user) block")
             const {todos} = user;
-            console.log("*** todos: ", todos);
             delete user.todos;
             dispatch(setTodos(todos));
         }
